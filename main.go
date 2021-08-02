@@ -12,12 +12,8 @@ import (
 )
 
 func main() {
-	// ip, _ := net.ResolveIPAddr("ip4", "example.com")
-	// ips, _ := net.LookupIP("example.com")
-	// fmt.Printf("ip: %s\n", ip)
-	// fmt.Printf("ip: %s\n", ips)
-
-	const host = "example.com"
+	// const host = "example.com"
+	host := os.Args[1]
 	ips, err := net.LookupIP(host)
 	if err != nil {
 		log.Fatal(err)
