@@ -22,8 +22,8 @@ type CLI struct {
 }
 
 func (c *CLI) Run(args []string) int {
-	// const host = "example.com"
 	host := os.Args[1]
+	// dst domain name -> dst IP
 	ips, err := net.LookupIP(host)
 	if err != nil {
 		fmt.Fprintf(c.errStream, "Error! can't resolve name to IP\n%s\n", err)
@@ -43,15 +43,18 @@ func (c *CLI) Run(args []string) int {
 		return ExitCodeError
 	}
 
+	// Listen Packet at 0.0.0.0 local network address
 	conn, err := net.ListenPacket("ip4:1", "0.0.0.0")
 	if err != nil {
 		// log.Fatal(err)
 		fmt.Fprintf(c.errStream, "Failed listen packet at 0.0.0.0\n%s\n", err)
 		return ExitCodeError
 	}
-	defer conn.Close()
-	p := ipv4.NewPacketConn(conn)
 
+	defer conn.Close()
+
+	// packet connection using conn
+	p := ipv4.NewPacketConn(conn)
 	// set per packet IP-level socket option
 	if err := p.SetControlMessage(ipv4.FlagTTL|ipv4.FlagSrc|ipv4.FlagDst|ipv4.FlagInterface, true); err != nil {
 		// log.Fatal(err)
