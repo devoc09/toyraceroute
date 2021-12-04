@@ -15,6 +15,7 @@ import (
 const (
 	ExitCodeOk    = 0
 	ExitCodeError = 1
+	noRecordError = 2
 )
 
 type CLI struct {
@@ -40,7 +41,7 @@ func (c *CLI) Run(args []string) int {
 	if dstIPAddr.IP == nil {
 		// log.Fatal("no A record found")
 		fmt.Fprintf(c.errStream, "No A record found")
-		return ExitCodeError
+		return noRecordError
 	}
 
 	// Listen Packet at 0.0.0.0 local network address
